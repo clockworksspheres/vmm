@@ -1,0 +1,88 @@
+import inspect
+from lib.loggers import CyLogger
+from lib.loggers import LogPriority as lp
+from lib.run_commands import RunWith
+from VirtualMachineManageTemplate import VirtualMachineManageTemplate
+
+
+class MacosVirtualboxVmm(VirtualMachineManageTemplate):
+
+    def __init__(self, logger, **kwargs):
+        """
+        """
+        print(f"Initializing {self.__class__.__name__} class")
+        if isinstance(logger, CyLogger):
+            self.logger = CyLogger()
+        else:
+            self.logger = CyLogger()
+            self.logger.initializeLogs()
+
+        self.run = RunWith(self.logger)
+
+        self.vboxmanage = "VBoxManage"
+
+    def list_vms(self):
+        """
+        List available VMs 
+        """
+        try:
+            run([self.vboxmanage, "list", "vms"], capture_output=False)
+        except SystemExit:
+            print("(utmctl not available — macOS/UTM only?)")
+
+    def start_vm(self, vm: str = "", headless: bool = False):
+        """
+         Start a virtual machine
+
+        """
+        cmd = [self.vboxmanage, "startvm", vm]
+        self.run.setCommand(cmd)
+        self.run.communicate()
+
+    def stop_vm(self, vm: str = "", hard: bool = True):
+        """
+         Stop a virtual machine
+        """
+        cmd = [self.vboxmanage, "controlvm", vm, "acpipowerbutton"]
+        self.run.setCommand(cmd)
+        self.run.communicate()
+
+    def suspend_vm(self, vm: str = ""):
+        """
+        Suspend a virtual machine
+        """
+        cmd = [self.vboxmanage, "controlvm", vm, "savestate"]
+        self.run.setCommand(cmd)
+        self.run.communicate()
+
+    def reset_vm(self, vm: str = "", hard: bool = True):
+        """
+        Reset a virtual machine 
+        """
+        cmd1 = [self.vboxmanage, "controlvm", vm, "reset"]
+        self.run.setCommand(cmd1)
+        self.run.communicate()
+        cmd2 = [self.vboxmanage, "start", vm]
+        self.run.setCommand(cmd2)
+        self.run.communicate()
+
+    def get_vm_status(self, vm: str):
+        """
+        Get the status of a virtual machine 
+        """
+        cmd = [self.vboxmanage, "showvminfo", vm]
+        self.run.setCommand(cmd)
+        out, err, retval = self.run.communicate()
+        print(f"{out.strip()}")
+        return out.strip()
+
+    def get_ip(self, vm: str = ""):
+        """
+        get the IP address of a virtual machine 
+        """
+        cmd = [self.vboxmanage, "guestproperty", "get", vm, "/VirtuallBox/GuestInfo/Net/0/IP"]
+        self.run.setCommand(cmd)
+        out, err, retval = self.run.communicate()
+        print(f"{out.strip()}")
+        return out.strip()
+

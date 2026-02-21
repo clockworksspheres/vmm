@@ -1,0 +1,14 @@
+*.pyc
+*.bak
+testlink
+*.icloud
+.idea
+__pycache__
+.DS_Store
+.qtcreator
+dist
+build
+packenv
+.obsidian/workspace.json
+*obsidian/workspace.json
+
