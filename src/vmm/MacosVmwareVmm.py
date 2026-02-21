@@ -48,11 +48,19 @@ class MacosVmwareVmm(VirtualMachineManageTemplate):
         self.run.setCommand(cmd)
         self.run.communicate()
 
-    def suspend_vm(self, vm: str = ""):
+    def pause_vm(self, vm: str = ""):
         """
         Suspend a virtual machine
         """
         cmd = [self.vmrun, "pause", vm, "soft"]
+        self.run.setCommand(cmd)
+        self.run.communicate()
+
+    def unpause_vm(self, vm: str = ""):
+        """
+        Suspend a virtual machine
+        """
+        cmd = [self.vmrun, "unpause", vm, "soft"]
         self.run.setCommand(cmd)
         self.run.communicate()
 

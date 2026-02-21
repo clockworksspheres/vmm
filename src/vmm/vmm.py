@@ -42,7 +42,6 @@ Examples:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
 Examples:
-  %(prog)s vmware "Ubuntu Server"               # headless
   %(prog)s vmware "/Users/roy/VMs/MyVM/My.vmx" --headless
   %(prog)s virtualbox "Windows 11 Test" --no-headless
   %(prog)s utm "My Linux Guest"
@@ -59,21 +58,35 @@ Examples:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
 Examples:
-  %(prog)s vmware "Production Server"
+  %(prog)s vmware "/full/path/to/MyVm.vmx"
   %(prog)s virtualbox "WinTest"
   %(prog)s utm "DevBox"
 """
     )   
 
-    # ── suspend ─────────────────────────────────────────────────────────────
+    # ── pause ─────────────────────────────────────────────────────────────
     p = subparsers.add_parser(
-        "suspend",
+        "pause",
         parents=[common],
         help="Suspend / save state of a VM",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
 Examples:
-  %(prog)s vmware "My Linux"
+  %(prog)s vmware "/full/path/to/MyVm.vmx"
+  %(prog)s virtualbox "Test VM"
+  %(prog)s utm "Experiment"
+"""
+    )
+
+    # ── unpause ─────────────────────────────────────────────────────────────
+    p = subparsers.add_parser(
+        "unpause",
+        parents=[common],
+        help="Suspend / save state of a VM",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""\
+Examples:
+  %(prog)s vmware "/full/path/to/MyVm.vmx"
   %(prog)s virtualbox "Test VM"
   %(prog)s utm "Experiment"
 """
@@ -87,7 +100,7 @@ Examples:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
 Examples:
-  %(prog)s vmware "Server01"
+  %(prog)s vmware "/full/path/to/MyVm.vmx"
   %(prog)s virtualbox "Win11" --hard
   %(prog)s reset utm "DevContainer"
 """
@@ -103,7 +116,7 @@ Examples:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
 Examples:
-  %(prog)s vmware "My Server"
+  %(prog)s vmware "/full/path/to/MyVm.vmx"
   %(prog)s virtualbox "Win10 Guest"
   %(prog)s utm "Linux Experiment"
 """
@@ -118,7 +131,7 @@ Examples:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
 Examples:
-  %(prog)s vmware "Ubuntu Server"
+  %(prog)s vmware "/full/path/to/MyVm.vmx"
   %(prog)s virtualbox "Windows Test"
   %(prog)s utm "DevBox"
 """
@@ -149,8 +162,12 @@ Examples:
         vmm.stop_vm(vm)
         print(f"Stopped {hyper} → {vm}")
 
-    elif cmd == "suspend":
-        vmm.suspend_vm(vm)
+    elif cmd == "pause":
+        vmm.pause_vm(vm)
+        print(f"Suspended {hyper} → {vm}")
+
+    elif cmd == "unpause":
+        vmm.unpause_vm(vm)
         print(f"Suspended {hyper} → {vm}")
 
     elif cmd == "reset":

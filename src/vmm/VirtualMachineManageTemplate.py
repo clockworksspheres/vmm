@@ -70,7 +70,16 @@ class VirtualMachineManageTemplate:
         self.__calledBy()
         raise MethodNotImplementedError
 
-    def suspend_vm(self, vm: str = ""):
+    def pause_vm(self, vm: str = ""):
+        """
+         
+        """
+        self.logger.log(lp.INFO,
+                        f"--{self.__class__.__name__} not yet in production.")
+        self.__calledBy()
+        raise MethodNotImplementedError
+
+    def unpause_vm(self, vm: str = ""):
         """
          
         """

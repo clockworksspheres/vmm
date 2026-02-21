@@ -53,11 +53,17 @@ class VirtualMachineManage(VirtualMachineManageTemplate):
         """
         self.vmm.stop_vm(vm, **kwargs)
 
-    def suspend_vm(self, vm: str = "", **kwargs):
+    def pause_vm(self, vm: str = "", **kwargs):
         """
         Suspend a VM
         """
-        self.vmm.suspend_vm(vm, **kwargs)
+        self.vmm.pause_vm(vm, **kwargs)
+
+    def unpause_vm(self, vm: str = "", **kwargs):
+        """
+        Suspend a VM
+        """
+        self.vmm.unpause_vm(vm, **kwargs)
 
     def reset_vm(self, vm: str = "", hard: bool = True, **kwargs):
         """

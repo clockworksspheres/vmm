@@ -48,11 +48,19 @@ class MacosUtmVmm(VirtualMachineManageTemplate):
         self.run.setCommand(cmd)
         self.run.communicate()
 
-    def suspend_vm(self, vm: str = ""):
+    def pause_vm(self, vm: str = ""):
         """
         Suspend a virtual machine
         """
         cmd = [self.utmctl, "pause", vm]
+        self.run.setCommand(cmd)
+        self.run.communicate()
+
+    def unpause_vm(self, vm: str = ""):
+        """
+        Suspend a virtual machine
+        """
+        cmd = [self.utmctl, "start", vm]
         self.run.setCommand(cmd)
         self.run.communicate()
 
