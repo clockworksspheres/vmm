@@ -42,7 +42,7 @@ Examples:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
 Examples:
-  %(prog)s vmware "/Users/roy/VMs/MyVM/My.vmx" --headless
+  %(prog)s vmware "/full/path/to/My.vmx" --headless
   %(prog)s virtualbox "Windows 11 Test" --no-headless
   %(prog)s utm "My Linux Guest"
 """

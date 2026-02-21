@@ -1,15 +1,6 @@
 """
 A module for logging to different facilities...
 
-Python logging references:
-https://docs.python.org/2/library/logging.html
-https://docs.python.org/2/library/logging.handlers.html
-https://docs.python.org/2/library/logging.config.html
-https://docs.python.org/2/howto/logging.html
-https://docs.python.org/2/howto/logging-cookbook.html
-https://docs.python.org/2/library/hotshot.html
-https://docs.python.org/2/library/multiprocessing.html?highlight=logging#logging
-
 """
 
 # TODO: Check values to be logged to see whether they are strings or byte streams and treat accordingly
@@ -505,8 +496,7 @@ class CyLogger(Singleton):
                 except Exception as err:
                     print(LogPriority.DEBUG + " : "  + str(traceback.format_exc()))
                     print(LogPriority.DEBUG + " : " + str(err))
-            elif int(self.lvl) <= 40:
-                #elif int(self.lvl) >= 40 and int(self.lvl) < 50:
+            elif int(self.lvl) >= 40 and int(self.lvl) < 50:
                 #####
                 # Error
                 self.logr.log(validatedLvl, prefix + "INFO: (" + pri + ") " + str(line))
