@@ -13,9 +13,11 @@ class VirtualMachineManage(VirtualMachineManageTemplate):
     def __init__(self, framework, **kwargs):
         """
         """
-        print(f"Initializing {self.__class__.__name__} class")        
         self.logger = CyLogger()
         self.logger.initializeLogs()
+
+        self.logger.log(lp.ERROR, f"Initializing {self.__class__.__name__} class")
+
         self.run = RunWith(self.logger)
 
         self.framework = framework

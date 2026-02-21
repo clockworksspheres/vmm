@@ -10,12 +10,13 @@ class MacosVirtualboxVmm(VirtualMachineManageTemplate):
     def __init__(self, logger, **kwargs):
         """
         """
-        print(f"Initializing {self.__class__.__name__} class")
         if isinstance(logger, CyLogger):
             self.logger = CyLogger()
         else:
             self.logger = CyLogger()
             self.logger.initializeLogs()
+
+        self.logger.log(lp.ERROR, f"Initializing {self.__class__.__name__} class")
 
         self.run = RunWith(self.logger)
 
