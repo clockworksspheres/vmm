@@ -121,7 +121,7 @@ Examples:
   %(prog)s utm "Linux Experiment"
 """
     )
-    p.add_argument("vm", help="VM identifier")
+    #p.add_argument("vm", help="VM identifier")
 
     # ── ip ──────────────────────────────────────────────────────────────────
     p = subparsers.add_parser(
@@ -175,7 +175,7 @@ Examples:
         print(f"Reset {hyper} → {vm}")
 
     elif cmd == "status":
-        vmm.status_vm(vm)
+        vmm.list_vms()
 
     elif cmd == "ip":
         vmm.get_ip(vm)

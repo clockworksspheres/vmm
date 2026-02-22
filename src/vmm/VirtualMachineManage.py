@@ -23,22 +23,33 @@ class VirtualMachineManage(VirtualMachineManageTemplate):
         self.framework = framework
 
         if self.framework == "vmware":
-            from MacosVmwareVmm import MacosVmwareVmm
-            self.vmm = MacosVmwareVmm(self.logger)
+            if sys.platform.lower.startswith("darwin"):
+                from MacosVmwareVmm import MacosVmwareVmm
+                self.vmm = MacosVmwareVmm(self.logger)
+            elif sys.platform.lower.startswith("win32"):
+                from WindowsVmwareVmm import WindowsVmwareVmm
+                self.vmm = WindowsVmwareVmm(self.logger)
         elif self.framework == "VirtualBox":
-            from MacosVirtualboxVmm import MacosVirtualboxVmm
-            self.vmm = MacosVirtualboxVmm(self.logger)
+            if sys.platform.lower.startswith("darwin"):
+                from MacosVirtualboxVmm import MacosVirtualboxVmm
+                self.vmm = MacosVirtualboxVmm(self.logger)
+            elif sys.platform.lower.startswith("win32"):
+                from WindowsVirtualboxVmm import WindowsVirtualboxVmm
+                self.vmm = WindowsVirtualboxVmm(self.logger)
         elif self.framework == "utm":
             from MacosUtmVmm import MacosUtmVmm
             self.vmm = MacosUtmVmm(self.logger)
+        elif self.framework == "hyperv":
+            from WindowsHypervVmm import WindowsHypervVmm
+            self.vmm = WindowsHypervVmm(self.logger)
         else:
             self.logger.log(lp.ERROR, f"{self.framework} hasn't been implemented")
 
-    def list_vms(self, vm, **kwargs):
+    def list_vms(self, **kwargs):
         """
         List available VMs      
         """
-        self.vmm.list_vms(vm, **kwargs)
+        self.vmm.list_vms(**kwargs)
 
     def start_vm(self, vm: str = "", headless: bool = False, **kwargs):
         """

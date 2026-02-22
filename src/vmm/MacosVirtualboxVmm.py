@@ -26,10 +26,10 @@ class MacosVirtualboxVmm(VirtualMachineManageTemplate):
         """
         List available VMs 
         """
-        try:
-            run([self.vboxmanage, "list", "vms"], capture_output=False)
-        except SystemExit:
-            print("(utmctl not available — macOS/UTM only?)")
+        cmd = [self.vboxmanage, "list", "vms"]
+        self.run.setCommand(cmd)
+        out, _, _, = self.run.communicate()
+        print(f"{out}")
 
     def start_vm(self, vm: str = "", headless: bool = False):
         """

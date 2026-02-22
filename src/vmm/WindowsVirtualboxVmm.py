@@ -5,7 +5,7 @@ from lib.run_commands import RunWith
 from VirtualMachineManageTemplate import VirtualMachineManageTemplate
 
 
-class MacosVmwareVmm(VirtualMachineManageTemplate):
+class WindowsVirtualboxVmm(VirtualMachineManageTemplate):
 
     def __init__(self, logger, **kwargs):
         """
@@ -16,27 +16,28 @@ class MacosVmwareVmm(VirtualMachineManageTemplate):
             self.logger = CyLogger()
             self.logger.initializeLogs()
 
-       #  self.logger.log(lp.INFO, f"Initializing {self.__class__.__name__} class")
+        self.logger.log(lp.ERROR, f"Initializing {self.__class__.__name__} class")
 
         self.run = RunWith(self.logger)
 
-        self.vmrun = "/Applications/VMware Fusion.app/Contents/Library/vmrun"
+        self.vboxmanage = "VBoxManage"
 
     def list_vms(self):
         """
         List available VMs 
         """
-        cmd = [self.vmrun, "list"]
+        cmd = [self.vboxmanage, "list", "vms"]
         self.run.setCommand(cmd)
-        output, _, _ = self.run.communicate()
-        print(f"{output}")
+        out, _, _ = self.run.communicate()
+        print(f"{out}")
 
     def start_vm(self, vm: str = "", headless: bool = False):
         """
          Start a virtual machine
-
         """
-        cmd = [self.vmrun, "-T", "fusion", "start", vm, "nogui" if headless else "gui"]
+        cmd = [self.vboxmanage, "startvm", vm]
+        if headless:
+            cmd += ["--type", "headless"]
         self.run.setCommand(cmd)
         self.run.communicate()
 
@@ -44,7 +45,7 @@ class MacosVmwareVmm(VirtualMachineManageTemplate):
         """
          Stop a virtual machine
         """
-        cmd = [self.vmrun, "stop", vm, "hard" if hard else "soft"]
+        cmd = [self.vboxmanage, "controlvm", vm, "acpipowerbutton"]
         self.run.setCommand(cmd)
         self.run.communicate()
 
@@ -52,7 +53,7 @@ class MacosVmwareVmm(VirtualMachineManageTemplate):
         """
         Suspend a virtual machine
         """
-        cmd = [self.vmrun, "pause", vm, "soft"]
+        cmd = [self.vboxmanage, "controlvm", vm, "savestate"]
         self.run.setCommand(cmd)
         self.run.communicate()
 
@@ -60,7 +61,7 @@ class MacosVmwareVmm(VirtualMachineManageTemplate):
         """
         Suspend a virtual machine
         """
-        cmd = [self.vmrun, "unpause", vm, "soft"]
+        cmd = [self.vboxmanage, "controlvm", vm, "resume"]
         self.run.setCommand(cmd)
         self.run.communicate()
 
@@ -68,15 +69,18 @@ class MacosVmwareVmm(VirtualMachineManageTemplate):
         """
         Reset a virtual machine 
         """
-        cmd = [self.vmrun, "reset", vm, "hard" if hard else "soft"]
-        self.run.setCommand(cmd)
+        cmd1 = [self.vboxmanage, "controlvm", vm, "reset"]
+        self.run.setCommand(cmd1)
+        self.run.communicate()
+        cmd2 = [self.vboxmanage, "start", vm]
+        self.run.setCommand(cmd2)
         self.run.communicate()
 
     def get_vm_status(self, vm: str):
         """
         Get the status of a virtual machine 
         """
-        cmd = [self.vmrun, "list", vm]
+        cmd = [self.vboxmanage, "showvminfo", vm]
         self.run.setCommand(cmd)
         out, err, retval = self.run.communicate()
         print(f"{out.strip()}")
@@ -86,7 +90,7 @@ class MacosVmwareVmm(VirtualMachineManageTemplate):
         """
         get the IP address of a virtual machine 
         """
-        cmd = [self.vmrun, "getGuestIPAddress", vm, "-wait"]
+        cmd = [self.vboxmanage, "guestproperty", "get", vm, "/VirtuallBox/GuestInfo/Net/0/IP"]
         self.run.setCommand(cmd)
         out, err, retval = self.run.communicate()
         print(f"{out.strip()}")

@@ -5,7 +5,7 @@ from lib.run_commands import RunWith
 from VirtualMachineManageTemplate import VirtualMachineManageTemplate
 
 
-class MacosVmwareVmm(VirtualMachineManageTemplate):
+class WindowsVmwareVmm(VirtualMachineManageTemplate):
 
     def __init__(self, logger, **kwargs):
         """
@@ -20,7 +20,7 @@ class MacosVmwareVmm(VirtualMachineManageTemplate):
 
         self.run = RunWith(self.logger)
 
-        self.vmrun = "/Applications/VMware Fusion.app/Contents/Library/vmrun"
+        self.vmrun = r"C:\Program Files (x86)\VMware\VMware Workstation\vmrun.exe"
 
     def list_vms(self):
         """
@@ -28,19 +28,18 @@ class MacosVmwareVmm(VirtualMachineManageTemplate):
         """
         cmd = [self.vmrun, "list"]
         self.run.setCommand(cmd)
-        output, _, _ = self.run.communicate()
-        print(f"{output}")
+        self.run.communicate()
 
     def start_vm(self, vm: str = "", headless: bool = False):
         """
          Start a virtual machine
 
         """
-        cmd = [self.vmrun, "-T", "fusion", "start", vm, "nogui" if headless else "gui"]
+        cmd = [self.vmrun, "-T", "ws", "start", vm, "nogui" if headless else "gui"]
         self.run.setCommand(cmd)
         self.run.communicate()
 
-    def stop_vm(self, vm: str = "", hard: bool = True):
+    def stop_vm(self, vm: str = "", hard: bool = False):
         """
          Stop a virtual machine
         """
@@ -52,7 +51,7 @@ class MacosVmwareVmm(VirtualMachineManageTemplate):
         """
         Suspend a virtual machine
         """
-        cmd = [self.vmrun, "pause", vm, "soft"]
+        cmd = [self.vmrun, "pause", vm]
         self.run.setCommand(cmd)
         self.run.communicate()
 
@@ -60,11 +59,11 @@ class MacosVmwareVmm(VirtualMachineManageTemplate):
         """
         Suspend a virtual machine
         """
-        cmd = [self.vmrun, "unpause", vm, "soft"]
+        cmd = [self.vmrun, "unpause", vm]
         self.run.setCommand(cmd)
         self.run.communicate()
 
-    def reset_vm(self, vm: str = "", hard: bool = True):
+    def reset_vm(self, vm: str = "", hard: bool = False):
         """
         Reset a virtual machine 
         """
@@ -76,7 +75,7 @@ class MacosVmwareVmm(VirtualMachineManageTemplate):
         """
         Get the status of a virtual machine 
         """
-        cmd = [self.vmrun, "list", vm]
+        cmd = [self.vmrun, "list"]
         self.run.setCommand(cmd)
         out, err, retval = self.run.communicate()
         print(f"{out.strip()}")
