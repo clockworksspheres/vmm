@@ -143,16 +143,16 @@ Examples:
 
     args = parser.parse_args()
 
-    if args.command == "list":
-        vmm.list_vms()
-        return
-
     hyper = args.hypervisor
     vm = args.vm
 
+    vmm = VirtualMachineManage(hyper)
+
     cmd = args.command
 
-    vmm = VirtualMachineManage(hyper)
+    if args.command == "list":
+        vmm.list_vms(hyper)
+        return
 
     if cmd == "start":
         vmm.start_vm(vm, headless=args.headless)

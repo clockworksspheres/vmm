@@ -3,6 +3,8 @@ Factory Class to spawn concrete Virtual Machine Managers
 (vmm), based on the passed in "framework"
 """
 import inspect
+import sys
+
 from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp
 from lib.run_commands import RunWith
@@ -23,23 +25,23 @@ class VirtualMachineManage(VirtualMachineManageTemplate):
         self.framework = framework
 
         if self.framework == "vmware":
-            if sys.platform.lower.startswith("darwin"):
+            if sys.platform.lower().startswith("darwin"):
                 from MacosVmwareVmm import MacosVmwareVmm
                 self.vmm = MacosVmwareVmm(self.logger)
-            elif sys.platform.lower.startswith("win32"):
+            elif sys.platform.lower().startswith("win32"):
                 from WindowsVmwareVmm import WindowsVmwareVmm
                 self.vmm = WindowsVmwareVmm(self.logger)
         elif self.framework == "VirtualBox":
-            if sys.platform.lower.startswith("darwin"):
+            if sys.platform.lower().startswith("darwin"):
                 from MacosVirtualboxVmm import MacosVirtualboxVmm
                 self.vmm = MacosVirtualboxVmm(self.logger)
-            elif sys.platform.lower.startswith("win32"):
+            elif sys.platform.lower().startswith("win32"):
                 from WindowsVirtualboxVmm import WindowsVirtualboxVmm
                 self.vmm = WindowsVirtualboxVmm(self.logger)
-        elif self.framework == "utm":
+        elif self.framework == "utm" and sys.platform.lower().startswith("darwin"):
             from MacosUtmVmm import MacosUtmVmm
             self.vmm = MacosUtmVmm(self.logger)
-        elif self.framework == "hyperv":
+        elif self.framework == "hyperv" and sys.platform.lower().startswith("win32"):
             from WindowsHypervVmm import WindowsHypervVmm
             self.vmm = WindowsHypervVmm(self.logger)
         else:
@@ -54,7 +56,6 @@ class VirtualMachineManage(VirtualMachineManageTemplate):
     def start_vm(self, vm: str = "", headless: bool = False, **kwargs):
         """
          Start a virtual machine
-
         """
         self.vmm.start_vm(vm, **kwargs)
 
