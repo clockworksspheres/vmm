@@ -13,17 +13,17 @@ import traceback
 import pathlib
 
 
-from config import DEFAULT_LOG_LEVEL, LogPriority
+from lib.config import DEFAULT_LOG_LEVEL, LogPriority
 
 if sys.platform.startswith('win32'):
     import win32api
-    from vmm.lib.windows_utilities import is_windows_process_elevated
+    from lib.windows_utilities import is_windows_process_elevated
 
 else:
     import pwd
 
 try:
-    from vmm.lib.localize import VERSION
+    from lib.localize import VERSION
 except ImportError or AssertionError:
     VERSION = '0.0.1'
 
@@ -31,7 +31,7 @@ except ImportError or AssertionError:
 # FISMACAT must be one of ['high', 'medium', 'low']
 
 try:
-    from vmm.lib.localize import FISMACAT
+    from lib.localize import FISMACAT
 except ImportError or AssertionError:
     FISMACAT = 'low'
 
@@ -54,7 +54,7 @@ else:
     DMI = False
 
 # third party libraries
-from vmm.lib.run_commands import RunWith as RunWith
+from lib.run_commands import RunWith as RunWith
 
 
 class Environment(object):

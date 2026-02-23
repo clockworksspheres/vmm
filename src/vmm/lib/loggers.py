@@ -23,7 +23,7 @@ import logging.handlers
 #sys.path.append("../..")
 # from vmm.lib.singleton import Singleton
 # from vmm.config import DEFAULT_LOG_LEVEL
-from config import DEFAULT_LOG_LEVEL
+from lib.config import DEFAULT_LOG_LEVEL
 from lib.singleton import Singleton
 
 #from logging.handlers import RotatingFileHandler

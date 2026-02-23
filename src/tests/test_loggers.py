@@ -13,13 +13,17 @@ import traceback
 import tracemalloc
 from datetime import datetime
 
-sys.path.append("..")
+#####
+# Include the parent project directory in the PYTHONPATH
+appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+sys.path.append(appendDir + "/vmm")
+
 
 # --- Non-native python libraries in this source tree
-from vmm.lib.environment import Environment
-from vmm.lib.loggers import CyLogger
-from vmm.lib.loggers import LogPriority
-from vmm.lib.run_commands import RunWith
+from lib.environment import Environment
+from lib.loggers import CyLogger
+from lib.loggers import LogPriority
+from lib.run_commands import RunWith
 
 
 class test_loggers(unittest.TestCase):
