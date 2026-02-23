@@ -20,7 +20,7 @@ else
    source packenv/bin/activate
 fi
 
-cp BuildScripts/build.ubuntu2404.spec jenkinsTools
+cp BuildScripts/build.ubuntu2404.spec vmm
 
 pushd vmm
 
