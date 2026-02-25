@@ -1,5 +1,5 @@
 import inspect
-from lib.loggers import CyLogger as logger
+from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp
 from lib.run_commands import RunWith
 

@@ -10,8 +10,8 @@ class MacosUtmVmm(VirtualMachineManageTemplate):
     def __init__(self, logger, **kwargs):
         """
         """
-        if isinstance(logger, CyLogger):
-            self.logger = CyLogger()
+        if isinstance(logger, type(CyLogger)):
+            self.logger = logger
         else:
             self.logger = CyLogger()
             self.logger.initializeLogs()
