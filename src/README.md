@@ -15,14 +15,16 @@ following hypervisors:
  * VmWare Fusion
  * Virtualbox
  * UTM
+ * HyperV
 
 ## Directories
 
 ```
-├── docs  # Support documentation
-├── proto # Prototyping directory
-├── tests # Project related tests
-└── vmm   # root of the source code
+├── BuildScripts # pyinstaller build scripts
+├── docs     # Support documentation
+├── proto    # Prototyping directory
+├── vmm      # root of the source code
+└── vmmBoard # eisenban kanban board directory
 ```
 
 ## Vmware VM Notes
@@ -34,9 +36,13 @@ VMware Fusion VM's, should look like:
 
 Unless the user has saved the VM to a different location.
 
+
+## VirtualBox VM Notes
+
+
 ## UTM VM Notes
 
 
-## VirtualBox VM Notes
+## HyperV VM Notes
 
 
