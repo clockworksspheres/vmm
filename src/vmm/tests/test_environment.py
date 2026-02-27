@@ -14,13 +14,8 @@ import tracemalloc
 #####
 # Include the parent project directory in the PYTHONPATH
 #appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
-#appendDir = ("../" + "/vmm")
-#sys.path.append(appendDir + "/vmm")
-#####
-# Include the parent project directory in the PYTHONPATH
-appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+appendDir = ("..")
 sys.path.append(appendDir)
-
 
 # --- Non-native python libraries in this source tree
 import lib.environment as environment

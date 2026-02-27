@@ -15,7 +15,8 @@ from datetime import datetime
 
 #####
 # Include the parent project directory in the PYTHONPATH
-appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+#appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+appendDir = ".."
 sys.path.append(appendDir)
 
 
