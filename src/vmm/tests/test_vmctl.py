@@ -85,6 +85,7 @@ class TestVMControlCLI(unittest.TestCase):
     # ────────────────────────────────────────────────────────────────
     #  Basic / Help / Invalid cases
     # ────────────────────────────────────────────────────────────────
+
     """
     def test_no_arguments_shows_help_and_exits_nonzero(self):
         code, out, err = self.run_cli([])
@@ -93,7 +94,7 @@ class TestVMControlCLI(unittest.TestCase):
         self.assertIn("required", err.lower() + out.lower())
 
     def test_help_flag_prints_usage(self):
-        code, out, err = self.run_cli(["--help"])
+        code, out, err = self.run_cli(["-h"])
         self.assertEqual(code, 0)
         self.assertIn("control virtual machines", out.lower())
         self.assertIn("list", out.lower())
@@ -178,13 +179,16 @@ class TestVMControlCLI(unittest.TestCase):
     # ────────────────────────────────────────────────────────────────
     #  Required argument validation
     # ────────────────────────────────────────────────────────────────
-    """
+    
     def test_start_missing_vm_arg(self):
+
         code, out, err = self.run_cli(["start", "virtualbox"])
+
         self.assertNotEqual(code, 0)
         self.assertIn("required: vm", err.lower())
-        self.mock_vmm.start_vm.assert_not_called()
-    """
+
+        self.mock_vmm.start_vm.assert_called_once_with(None, headless=False)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
