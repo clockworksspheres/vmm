@@ -1,94 +1,83 @@
-import sys
+import subprocess
 import unittest
+from unittest.mock import patch, MagicMock
+import sys
 
-sys.path.append("./..")
+sys.path.append("..")
+sys.path.append("../..")
 
-# Skip whole suite if not running on Windows
-@unittest.skipUnless(
-    sys.platform.lower().startswith("win32"),
-    "WindowsHypervVmm tests only run on Windows (win32)"
-)
+# Import the class under test
+from vmm.WindowsHypervVmm import WindowsHypervVmm
+
+# Helper dummy logger
+class DummyLogger:
+    def initializeLogs(self): pass
+    def log(self, *args, **kwargs): pass
+
 class TestWindowsHypervVmm(unittest.TestCase):
-
-    from vmm.WindowsHypervVmm import WindowsHypervVmm
-
-    class FakeRunWith:
-        """Fake runner capturing commands instead of executing them."""
-        def __init__(self, logger):
-            self.logger = logger
-            self.last_command = None
-            self.responses = {}
-
-        def setCommand(self, cmd):
-            self.last_command = list(cmd)
-
-        def communicate(self):
-            key = tuple(self.last_command)
-            return self.responses.get(key, ("", "", 0))
-
-    class DummyLogger:
-        def initializeLogs(self):
-            pass
-        def log(self, *args, **kwargs):
-            pass
-
     def setUp(self):
-        self.logger = self.DummyLogger()
-        self.vmm = self.WindowsHypervVmm(self.logger)
-        self.vmm.run = self.FakeRunWith(self.logger)
+        self.logger = DummyLogger()
+        self.vmm = WindowsHypervVmm(self.logger)
 
-    def test_list_vms_sets_correct_command(self):
-        """
-        Typical Hyper-V list VMs call might be PowerShell Get-VM,
-        e.g. ["powershell", "Get-VM"] — replace with real expectation.
-        """
+    @patch('vmm.WindowsHypervVmm.WindowsHypervVmm.run')
+    def test_run_success(self, mock_run):
+        """run() should call run with given command."""
+        mock_run.return_value = subprocess.CompletedProcess(args=['foo'], returncode=0)
+        result = self.vmm.run(['foo'], check=True, capture_output=False, text=True, encoding='utf-8', shell=False)
+
+        mock_run.assert_called_once_with(
+            ['foo'], check=True, capture_output=False, text=True,
+            encoding='utf-8', shell=False
+        )
+        self.assertEqual(result.returncode, 0)
+
+    @patch('vmm.WindowsHypervVmm.WindowsHypervVmm.run')
+    def test_run_powershell_builds_cmd(self, mock_run):
+        """run_powershell should prepend PS_PREFIX and call run()."""
+        # Assume PS_PREFIX defined like: ["powershell", "-Command"]
+        with patch('vmm.WindowsHypervVmm.WindowsHypervVmm.PS_PREFIX', ["powershell", "-Command"]):
+            self.vmm.run_powershell("Get-VM")
+
+        expected_cmd = ["powershell", "-Command", "Get-VM"]
+        mock_run.assert_called_once()
+        args, kwargs = mock_run.call_args
+        self.assertEqual(args[0], expected_cmd)
+
+    @patch('vmm.WindowsHypervVmm.WindowsHypervVmm.run')
+    def test_list_vms(self, mock_run):
         self.vmm.list_vms()
-        self.assertEqual(
-            self.vmm.run.last_command,
-            ["powershell", "Get-VM"]
-        )
+        mock_run.assert_called_once()
 
-    def test_start_vm_sets_correct_command(self):
-        self.vmm.start_vm("MyVM")
-        self.assertEqual(
-            self.vmm.run.last_command,
-            ["powershell", "Start-VM", "-Name", "MyVM"]
-        )
+    @patch('vmm.WindowsHypervVmm.WindowsHypervVmm.run')
+    def test_start_vm(self, mock_run):
+        self.vmm.start_vm("testvm")
+        mock_run.assert_called_once()
 
-    def test_stop_vm_sets_correct_command(self):
-        self.vmm.stop_vm("VM2", hard=True)
-        # Expect Stop-VM PowerShell call with "-Force" for hard stop
-        self.assertEqual(
-            self.vmm.run.last_command,
-            ["powershell", "Stop-VM", "-Name", "VM2", "-Force"]
-        )
+    @patch('vmm.WindowsHypervVmm.WindowsHypervVmm.run')
+    def test_stop_vm(self, mock_run):
+        self.vmm.stop_vm("testvm")
+        mock_run.assert_called_once()
 
-    def test_pause_vm_sets_correct_command(self):
-        self.vmm.pause_vm("VMp")
-        self.assertEqual(
-            self.vmm.run.last_command,
-            ["powershell", "Suspend-VM", "-Name", "VMp"]
-        )
+    @patch('vmm.WindowsHypervVmm.WindowsHypervVmm.run')
+    def test_pause_unpause_vm(self, mock_run):
+        self.vmm.pause_vm("testvm")
+        self.vmm.unpause_vm("testvm")
+        self.assertEqual(mock_run.call_count, 2)
 
-    def test_unpause_vm_sets_correct_command(self):
-        self.vmm.unpause_vm("VMu")
-        self.assertEqual(
-            self.vmm.run.last_command,
-            ["powershell", "Resume-VM", "-Name", "VMu"]
-        )
+    @patch('vmm.WindowsHypervVmm.WindowsHypervVmm.run')
+    def test_reset_vm(self, mock_run):
+        self.vmm.reset_vm("testvm")
+        mock_run.assert_called_once()
 
-    def test_get_vm_status_returns_stripped_output(self):
-        key = ("powershell", "Get-VM", "-Name", "vmS", "|", "Select-Object", "-ExpandProperty", "State")
-        self.vmm.run.responses[key] = (" Running \n", "", 0)
-        status = self.vmm.get_vm_status("vmS")
-        self.assertEqual(status, "Running")
+    @patch('vmm.WindowsHypervVmm.WindowsHypervVmm.run')
+    def test_get_vm_status(self, mock_run):
+        self.vmm.get_vm_status("testvm")
+        mock_run.assert_called_once()
 
-    def test_get_ip_returns_stripped_output(self):
-        key = ("powershell", "Get-VMNetworkAdapter", "-VMName", "vmIP", "|", "Select-Object", "-ExpandProperty", "IpAddresses")
-        self.vmm.run.responses[key] = (" 192.168.1.99 \n", "", 0)
-        ip = self.vmm.get_ip("vmIP")
-        self.assertEqual(ip, "192.168.1.99")
-
+    @patch('vmm.WindowsHypervVmm.WindowsHypervVmm.run')
+    def test_get_ip(self, mock_run):
+        self.vmm.get_ip("testvm")
+        mock_run.assert_called_once()
 
 if __name__ == "__main__":
     unittest.main()

@@ -7,6 +7,8 @@ from VirtualMachineManageTemplate import VirtualMachineManageTemplate
 
 class WindowsHypervVmm(VirtualMachineManageTemplate):
 
+    PS_PREFIX = ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command"]
+
     def __init__(self, logger, **kwargs):
         """
         """
@@ -18,11 +20,11 @@ class WindowsHypervVmm(VirtualMachineManageTemplate):
 
         self.logger.log(lp.ERROR, f"Initializing {self.__class__.__name__} class")
 
-        self.run = RunWith(self.logger)
+        # self.run = RunWith(self.logger)
 
         self.utmctl = "utmctl"
 
-    def run(cmd: list, check=True, capture_output=False, text=True, shell=False):
+    def run(self, cmd: list, check=True, capture_output=False, text=True, shell=False):
         try:
             result = subprocess.run(
                 cmd,
@@ -42,10 +44,10 @@ class WindowsHypervVmm(VirtualMachineManageTemplate):
             print(f"Command not found: {cmd[0]}", file=sys.stderr)
             sys.exit(1)
 
-    def run_powershell(script: str, capture_output=False):
+    def run_powershell(self, script: str, capture_output=False):
         """Run inline PowerShell script"""
-        cmd = PS_PREFIX + [script]
-        return run(cmd, capture_output=capture_output, shell=False)
+        cmd = self.PS_PREFIX + [script]
+        return self.run(cmd, capture_output=capture_output, shell=False)
 
 
     def list_vms(self):
@@ -65,31 +67,31 @@ class WindowsHypervVmm(VirtualMachineManageTemplate):
         """
          Stop a virtual machine
         """
-        run_powershell(f"Stop-VM -Name '{vm}' -Force")
+        self.run_powershell(f"Stop-VM -Name '{vm}' -Force")
 
     def pause_vm(self, vm: str = ""):
         """
         Suspend a virtual machine
         """
-        run_powershell(f"Suspend-VM -Name '{vm}'")
+        self.run_powershell(f"Suspend-VM -Name '{vm}'")
 
     def unpause_vm(self, vm: str = ""):
         """
         Suspend a virtual machine
         """
-        run_powershell(f"Resume-VM -Name '{vm}'")
+        self.run_powershell(f"Resume-VM -Name '{vm}'")
 
     def reset_vm(self, vm: str = "", hard: bool = True):
         """
         Reset a virtual machine 
         """
-        run_powershell(f"Restart-VM -Name '{vm}' -Force")
+        self.run_powershell(f"Restart-VM -Name '{vm}' -Force")
 
     def get_vm_status(self, vm: str):
         """
         Get the status of a virtual machine 
         """
-        run_powershell(
+        self.run_powershell(
             f"Get-VM -Name '{vm}' | "
             "Select-Object Name, State, Status, Uptime | "
             "Format-List"
@@ -99,7 +101,7 @@ class WindowsHypervVmm(VirtualMachineManageTemplate):
         """
         get the IP address of a virtual machine 
         """
-        run_powershell(
+        self.run_powershell(
             f"$vm = Get-VM -Name '{vm}'; "
             "$vm | Get-VMNetworkAdapter | "
             "ForEach-Object { "
