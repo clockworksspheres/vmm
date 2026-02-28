@@ -7,6 +7,7 @@ Created on Jul 13, 2011 - stonix project
 import os
 import re
 import sys
+import platform
 import unittest
 import traceback
 import tracemalloc
@@ -19,6 +20,7 @@ sys.path.append(appendDir)
 
 # --- Non-native python libraries in this source tree
 import lib.environment as environment
+from lib import config
 
 if sys.platform.startswith('win32'):
     import win32api
@@ -39,20 +41,23 @@ class test_environment(unittest.TestCase):
 
     def testGetostype(self):
         tracemalloc.start(10)
-        validtypes = 'Red Hat Enterprise Linux|Debian|Ubuntu|CentOS|Fedora|Rocky|Alma|' + \
-                     'openSUSE|Mac OS X|macOS'
+        validtypes = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|Debian|Ubuntu|CentOS|Fedora|' + \
+                     'openSUSE|Mac OS X|macOS|Windows'
         print('OS Type: ' + str(self.to.getostype()))
         self.assertTrue(re.search(validtypes, self.to.getostype()))
 
     def testGetosfamily(self):
         tracemalloc.start(10)
-        validfamilies = ['linux', 'darwin', 'solaris', 'freebsd']
+        validfamilies = ['linux', 'darwin', 'solaris', 'freebsd', 'windows']
         self.assertTrue(self.to.getosfamily() in validfamilies)
 
     def testGetosver(self):
         tracemalloc.start(10)
-        self.assertTrue(re.search(r'([0-9]{1,3})|(([0-9]{1,3})\.([0-9]{1,3}))',
-                                  self.to.getosver()))
+        if not platform.system() == "Windows":
+            self.assertTrue(re.search(r'([0-9]{1,3})|(([0-9]{1,3})\.([0-9]{1,3}))',
+                                      self.to.getosver()))
+        else:
+            self.assertTrue(re.search(r'([1-9][0-9])', self.to.getosver()))
 
     def testGetipaddress(self):
         if sys.platform.startswith('darwin'):
@@ -69,7 +74,13 @@ class test_environment(unittest.TestCase):
                                   self.to.getmacaddr()))
 
     def testGeteuid(self):
-        uid = os.geteuid()
+        if sys.platform.lower().startswith("win32"):
+            uid = win32api.GetUserName()
+        #    currpwd = os.environ['USERPROFILE']
+        else:
+             uid = os.geteuid()
+        #     currpwd = pwd.getpwuid(self.euid)
+        #uid = os.geteuid()
         tracemalloc.start(10)
         self.assertTrue(self.to.geteuid() == uid)
 
@@ -96,7 +107,8 @@ class test_environment(unittest.TestCase):
 
     def testGetEuidHome(self):
         tracemalloc.start(10)
-        self.assertEqual(self.to.geteuidhome(),
+        if not sys.platform.startswith("win32"):
+            self.assertEqual(self.to.geteuidhome(),
                              pwd.getpwuid(os.geteuid())[5])
 
     def testGetSysSerNo(self):
