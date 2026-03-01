@@ -21,6 +21,10 @@ import subprocess
 from subprocess import Popen, PIPE
 from subprocess import SubprocessError as SubprocessError
 
+sys.path.append("./../..")
+sys.path.append("./..")
+
+sys.path.append("./..")
 
 from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp
@@ -81,7 +85,7 @@ class RunWith(object):
     def __init__(self, logger=None, use_logger=True):
         if use_logger == True:
 
-            if isinstance(logger, CyLogger):
+            if isinstance(logger, type(CyLogger)):
                 self.logger = logger
             else:
                 self.logger = MockLogger
@@ -170,8 +174,9 @@ class RunWith(object):
         # if creationflags is not None:
         #    if re.search(",", creationflags):
         #        self.creationflags = re.sub(",", " | ", creationflags)
-        if creationflags is True:
-            self.creationflags = subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP
+        #if creationflags is True:
+        #    self.creationflags = subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP
+        #    self.creationflags = subprocess.CREATE_NEW_PROCESS_GROUP
 
     ###########################################################################
 
@@ -293,11 +298,11 @@ class RunWith(object):
             finally:
                 try:
                     proc.stdout.close()
-                except SubprocessError:
+                except (SubprocessError, UnboundLocalError):
                     pass
                 try:
                     proc.stderr.close()
-                except SubprocessError:
+                except (SubprocessError, UnboundLocalError):
                     pass
                 #####
                 # Lines below could reveal a password if it is passed as an
@@ -364,10 +369,14 @@ class RunWith(object):
             finally:
                 try:
                     proc.stdout.close()
+                except UnboundLocalError:
+                    pass
                 except SubprocessError:
                     pass 
                 try:
                     proc.stderr.close()
+                except UnboundLocalError:
+                    pass
                 except SubprocessError:
                     pass 
                 if not silent:
@@ -639,7 +648,12 @@ class RunWith(object):
             self.retcode = None
 
         self.command = None
-        return self.stdout, self.stderr, self.retcode, timeout["value"]
+        try:
+            retvalue = self.stdout, self.stderr, self.retcode, timeout["value"]
+        except UnboundLocalError:
+            retvalue = self.stdout, self.stderr, self.retcode, ""
+        return retvalue
+            
 
     ###########################################################################
 
@@ -1097,7 +1111,7 @@ class RunThread(threading.Thread):
             self.shell = False
             self.printcmd = self.command
 
-        if isinstance(logger, CyLogger):
+        if isinstance(logger, type(CyLogger)):
             self.logger = logger
         else:
             raise NotACyLoggerError("Passed in value for logger " +
@@ -1167,9 +1181,8 @@ def runMyThreadCommand(cmd, logger, myshell=False):
     """
     retval = None
     reterr = None
-    if not isinstance(logger, CyLogger):
-        raise NotACyLoggerError("Passed in value for logger is "
-                                "invalid, try again.")
+    if not isinstance(logger, type(CyLogger)):
+        raise NotACyLoggerError("Passed in value for logger is invalid, try again.")
     print(str(cmd))
     print(str(logger))
     if cmd and logger:
