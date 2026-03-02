@@ -12,7 +12,7 @@ of this code.
 Currently this is designed for macOS, and the 
 following hypervisors:
 
- * VmWare Fusion
+ * VmWare Fusion and Workstation
  * Virtualbox
  * UTM
  * HyperV
