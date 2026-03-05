@@ -40,6 +40,26 @@ class VmCtlUi(QMainWindow):
         self.ui.actionComboBox.addItems(["start", "stop", "restart",
                                          "pause", "unpause",
                                          "status", "ip", "list"])
+ 
+        self.ui.stackedWidget.setCurrentIndex(0)
+
+        # Connect combo to stack
+        self.ui.actionComboBox.currentIndexChanged.connect(self.handle_combo_action)
+
+    def handle_combo_action(self, index):
+        """
+        """
+        if index == 0:
+            self.ui.stackedWidget.setCurrentIndex(0)
+        elif index in (1, 2):
+            self.ui.stackedWidget.setCurrentIndex(1)
+        elif index in (3, 4):
+            self.ui.stackedWidget.setCurrentIndex(2)
+        elif index in (5, 6, 7):
+            self.ui.stackedWidget.setCurrentIndex(3)
+        else:
+            raise IndexError
+
 
 
 if __name__=="__main__":

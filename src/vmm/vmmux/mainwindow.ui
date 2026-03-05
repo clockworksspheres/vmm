@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>489</width>
-    <height>308</height>
+    <width>659</width>
+    <height>393</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -26,126 +26,114 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>20</y>
-      <width>421</width>
-      <height>216</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <property name="sizeConstraint">
-      <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
-     </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="hypervisorLabel">
-       <property name="text">
-        <string>Hypervisor</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLineEdit" name="vmNameLineEdit"/>
-     </item>
-     <item row="2" column="1" rowspan="4">
-      <widget class="QStackedWidget" name="stackedWidget">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <widget class="QWidget" name="page">
-        <widget class="QRadioButton" name="headlessRadioButton">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>20</y>
-           <width>99</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Headless</string>
-         </property>
-        </widget>
-       </widget>
-       <widget class="QWidget" name="page_2">
-        <widget class="QRadioButton" name="hardRadioButton">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>20</y>
-           <width>99</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Hard</string>
-         </property>
-        </widget>
-       </widget>
-       <widget class="QWidget" name="page_3">
-        <widget class="QTextEdit" name="textEdit">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>10</y>
-           <width>171</width>
-           <height>121</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="hypervisorLabel">
+      <property name="text">
+       <string>Hypervisor</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QComboBox" name="hypervisorComboBox"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="actionLabel">
+      <property name="text">
+       <string>Action</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" rowspan="4">
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="currentIndex">
+       <number>3</number>
+      </property>
+      <widget class="QWidget" name="page">
+       <widget class="QRadioButton" name="headlessRadioButton">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>99</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Headless</string>
+        </property>
        </widget>
       </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="actionLabel">
-       <property name="text">
-        <string>Action</string>
-       </property>
+      <widget class="QWidget" name="page_2">
+       <widget class="QRadioButton" name="hardRadioButton">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>99</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Hard</string>
+        </property>
+       </widget>
       </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QComboBox" name="actionComboBox"/>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="vmNameLabel">
-       <property name="text">
-        <string>virtual machine name</string>
-       </property>
+      <widget class="QWidget" name="page_4"/>
+      <widget class="QWidget" name="page_3">
+       <widget class="QTextEdit" name="textEdit">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>10</y>
+          <width>301</width>
+          <height>151</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
       </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="standardButtons">
-        <set>QDialogButtonBox::StandardButton::Apply|QDialogButtonBox::StandardButton::Ok</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QComboBox" name="hypervisorComboBox"/>
-     </item>
-    </layout>
-   </widget>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QComboBox" name="actionComboBox"/>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="vmNameLabel">
+      <property name="text">
+       <string>virtual machine name</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLineEdit" name="vmNameLineEdit"/>
+    </item>
+    <item row="6" column="1">
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="standardButtons">
+       <set>QDialogButtonBox::StandardButton::Apply|QDialogButtonBox::StandardButton::Ok</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>489</width>
+     <width>659</width>
      <height>39</height>
     </rect>
    </property>
