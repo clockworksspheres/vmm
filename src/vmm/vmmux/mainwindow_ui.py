@@ -25,21 +25,21 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(489, 308)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.widget = QWidget(self.centralwidget)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(30, 20, 421, 181))
-        self.gridLayout = QGridLayout(self.widget)
+        self.layoutWidget = QWidget(self.centralwidget)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.layoutWidget.setGeometry(QRect(30, 20, 421, 181))
+        self.gridLayout = QGridLayout(self.layoutWidget)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.label = QLabel(self.widget)
-        self.label.setObjectName(u"label")
+        self.actionLabel = QLabel(self.layoutWidget)
+        self.actionLabel.setObjectName(u"actionLabel")
 
-        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.actionLabel, 0, 0, 1, 1)
 
-        self.stackedWidget = QStackedWidget(self.widget)
+        self.stackedWidget = QStackedWidget(self.layoutWidget)
         self.stackedWidget.setObjectName(u"stackedWidget")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
@@ -48,15 +48,15 @@ class Ui_MainWindow(object):
         self.stackedWidget.setSizePolicy(sizePolicy)
         self.page = QWidget()
         self.page.setObjectName(u"page")
-        self.radioButton = QRadioButton(self.page)
-        self.radioButton.setObjectName(u"radioButton")
-        self.radioButton.setGeometry(QRect(20, 20, 99, 20))
+        self.headlessRadioButton = QRadioButton(self.page)
+        self.headlessRadioButton.setObjectName(u"headlessRadioButton")
+        self.headlessRadioButton.setGeometry(QRect(20, 20, 99, 20))
         self.stackedWidget.addWidget(self.page)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
-        self.radioButton_2 = QRadioButton(self.page_2)
-        self.radioButton_2.setObjectName(u"radioButton_2")
-        self.radioButton_2.setGeometry(QRect(20, 20, 99, 20))
+        self.hardRadioButton = QRadioButton(self.page_2)
+        self.hardRadioButton.setObjectName(u"hardRadioButton")
+        self.hardRadioButton.setGeometry(QRect(20, 20, 99, 20))
         self.stackedWidget.addWidget(self.page_2)
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
@@ -69,22 +69,22 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.stackedWidget, 0, 1, 4, 1)
 
-        self.comboBox = QComboBox(self.widget)
-        self.comboBox.setObjectName(u"comboBox")
+        self.actionComboBox = QComboBox(self.layoutWidget)
+        self.actionComboBox.setObjectName(u"actionComboBox")
 
-        self.gridLayout.addWidget(self.comboBox, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.actionComboBox, 1, 0, 1, 1)
 
-        self.label_2 = QLabel(self.widget)
-        self.label_2.setObjectName(u"label_2")
+        self.vmNameLabel = QLabel(self.layoutWidget)
+        self.vmNameLabel.setObjectName(u"vmNameLabel")
 
-        self.gridLayout.addWidget(self.label_2, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.vmNameLabel, 2, 0, 1, 1)
 
-        self.lineEdit = QLineEdit(self.widget)
-        self.lineEdit.setObjectName(u"lineEdit")
+        self.vmNameLineEdit = QLineEdit(self.layoutWidget)
+        self.vmNameLineEdit.setObjectName(u"vmNameLineEdit")
 
-        self.gridLayout.addWidget(self.lineEdit, 3, 0, 1, 1)
+        self.gridLayout.addWidget(self.vmNameLineEdit, 3, 0, 1, 1)
 
-        self.buttonBox = QDialogButtonBox(self.widget)
+        self.buttonBox = QDialogButtonBox(self.layoutWidget)
         self.buttonBox.setObjectName(u"buttonBox")
         self.buttonBox.setStandardButtons(QDialogButtonBox.StandardButton.Apply|QDialogButtonBox.StandardButton.Ok)
 
@@ -93,7 +93,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 800, 39))
+        self.menubar.setGeometry(QRect(0, 0, 489, 39))
         self.menuvmctl = QMenu(self.menubar)
         self.menuvmctl.setObjectName(u"menuvmctl")
         MainWindow.setMenuBar(self.menubar)
@@ -105,7 +105,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -113,10 +113,10 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"Action", None))
-        self.radioButton.setText(QCoreApplication.translate("MainWindow", u"RadioButton", None))
-        self.radioButton_2.setText(QCoreApplication.translate("MainWindow", u"RadioButton", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"virtual machine name", None))
+        self.actionLabel.setText(QCoreApplication.translate("MainWindow", u"Action", None))
+        self.headlessRadioButton.setText(QCoreApplication.translate("MainWindow", u"Headless", None))
+        self.hardRadioButton.setText(QCoreApplication.translate("MainWindow", u"Hard", None))
+        self.vmNameLabel.setText(QCoreApplication.translate("MainWindow", u"virtual machine name", None))
         self.menuvmctl.setTitle(QCoreApplication.translate("MainWindow", u"vmctl", None))
     # retranslateUi
 

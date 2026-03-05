@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>489</width>
+    <height>308</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -25,7 +25,7 @@
     </property>
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="actionLabel">
        <property name="text">
         <string>Action</string>
        </property>
@@ -40,10 +40,10 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page">
-        <widget class="QRadioButton" name="radioButton">
+        <widget class="QRadioButton" name="headlessRadioButton">
          <property name="geometry">
           <rect>
            <x>20</x>
@@ -53,12 +53,12 @@
           </rect>
          </property>
          <property name="text">
-          <string>RadioButton</string>
+          <string>Headless</string>
          </property>
         </widget>
        </widget>
        <widget class="QWidget" name="page_2">
-        <widget class="QRadioButton" name="radioButton_2">
+        <widget class="QRadioButton" name="hardRadioButton">
          <property name="geometry">
           <rect>
            <x>20</x>
@@ -68,7 +68,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>RadioButton</string>
+          <string>Hard</string>
          </property>
         </widget>
        </widget>
@@ -93,17 +93,17 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QComboBox" name="comboBox"/>
+      <widget class="QComboBox" name="actionComboBox"/>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="vmNameLabel">
        <property name="text">
         <string>virtual machine name</string>
        </property>
       </widget>
      </item>
      <item row="3" column="0">
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLineEdit" name="vmNameLineEdit"/>
      </item>
      <item row="4" column="1">
       <widget class="QDialogButtonBox" name="buttonBox">
@@ -120,7 +120,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>489</width>
      <height>39</height>
     </rect>
    </property>
