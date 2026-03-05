@@ -17,22 +17,31 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWidgets import (QAbstractButton, QApplication, QComboBox, QDialogButtonBox,
-    QGridLayout, QLabel, QLineEdit, QMainWindow,
-    QMenu, QMenuBar, QRadioButton, QSizePolicy,
-    QStackedWidget, QStatusBar, QTextEdit, QWidget)
+    QGridLayout, QLabel, QLayout, QLineEdit,
+    QMainWindow, QMenu, QMenuBar, QRadioButton,
+    QSizePolicy, QStackedWidget, QStatusBar, QTextEdit,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(489, 308)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
+        MainWindow.setSizePolicy(sizePolicy)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
+        self.centralwidget.setSizePolicy(sizePolicy)
         self.layoutWidget = QWidget(self.centralwidget)
         self.layoutWidget.setObjectName(u"layoutWidget")
         self.layoutWidget.setGeometry(QRect(30, 20, 421, 181))
         self.gridLayout = QGridLayout(self.layoutWidget)
         self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.actionLabel = QLabel(self.layoutWidget)
         self.actionLabel.setObjectName(u"actionLabel")
@@ -41,11 +50,11 @@ class Ui_MainWindow(object):
 
         self.stackedWidget = QStackedWidget(self.layoutWidget)
         self.stackedWidget.setObjectName(u"stackedWidget")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.stackedWidget.sizePolicy().hasHeightForWidth())
-        self.stackedWidget.setSizePolicy(sizePolicy)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.stackedWidget.sizePolicy().hasHeightForWidth())
+        self.stackedWidget.setSizePolicy(sizePolicy1)
         self.page = QWidget()
         self.page.setObjectName(u"page")
         self.headlessRadioButton = QRadioButton(self.page)
@@ -63,8 +72,8 @@ class Ui_MainWindow(object):
         self.textEdit = QTextEdit(self.page_3)
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setGeometry(QRect(0, 10, 171, 121))
-        sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
-        self.textEdit.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
+        self.textEdit.setSizePolicy(sizePolicy1)
         self.stackedWidget.addWidget(self.page_3)
 
         self.gridLayout.addWidget(self.stackedWidget, 0, 1, 4, 1)
