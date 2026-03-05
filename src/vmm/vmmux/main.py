@@ -29,14 +29,17 @@ class VmCtlUi(QMainWindow):
         platform = sys.platform.lower()
 
         if platform.startswith("darwin"):
-            self.ui.actionComboBox.addItems(["VMware Fusion",
-                                             "UTM",
-                                             "Virtualbox"])
+            self.ui.hypervisorComboBox.addItems(["VMware Fusion",
+                                                 "UTM",
+                                                 "Virtualbox"])
         elif platform.startswith("win"):
-            self.ui.actionComboBox.addItems(["VMware Workstation",
-                                             "HyperV",
-                                             "Virtualbox"])
+            self.ui.hypervisorComboBox.addItems(["VMware Workstation",
+                                                 "HyperV",
+                                                 "Virtualbox"])
 
+        self.ui.actionComboBox.addItems(["start", "stop", "restart",
+                                         "pause", "unpause",
+                                         "status", "ip", "list"])
 
 
 if __name__=="__main__":

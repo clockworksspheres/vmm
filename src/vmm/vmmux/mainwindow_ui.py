@@ -38,15 +38,20 @@ class Ui_MainWindow(object):
         self.centralwidget.setSizePolicy(sizePolicy)
         self.layoutWidget = QWidget(self.centralwidget)
         self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(30, 20, 421, 181))
+        self.layoutWidget.setGeometry(QRect(30, 20, 421, 216))
         self.gridLayout = QGridLayout(self.layoutWidget)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.actionLabel = QLabel(self.layoutWidget)
-        self.actionLabel.setObjectName(u"actionLabel")
+        self.hypervisorLabel = QLabel(self.layoutWidget)
+        self.hypervisorLabel.setObjectName(u"hypervisorLabel")
 
-        self.gridLayout.addWidget(self.actionLabel, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.hypervisorLabel, 0, 0, 1, 1)
+
+        self.vmNameLineEdit = QLineEdit(self.layoutWidget)
+        self.vmNameLineEdit.setObjectName(u"vmNameLineEdit")
+
+        self.gridLayout.addWidget(self.vmNameLineEdit, 5, 0, 1, 1)
 
         self.stackedWidget = QStackedWidget(self.layoutWidget)
         self.stackedWidget.setObjectName(u"stackedWidget")
@@ -76,28 +81,33 @@ class Ui_MainWindow(object):
         self.textEdit.setSizePolicy(sizePolicy1)
         self.stackedWidget.addWidget(self.page_3)
 
-        self.gridLayout.addWidget(self.stackedWidget, 0, 1, 4, 1)
+        self.gridLayout.addWidget(self.stackedWidget, 2, 1, 4, 1)
+
+        self.actionLabel = QLabel(self.layoutWidget)
+        self.actionLabel.setObjectName(u"actionLabel")
+
+        self.gridLayout.addWidget(self.actionLabel, 2, 0, 1, 1)
 
         self.actionComboBox = QComboBox(self.layoutWidget)
         self.actionComboBox.setObjectName(u"actionComboBox")
 
-        self.gridLayout.addWidget(self.actionComboBox, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.actionComboBox, 3, 0, 1, 1)
 
         self.vmNameLabel = QLabel(self.layoutWidget)
         self.vmNameLabel.setObjectName(u"vmNameLabel")
 
-        self.gridLayout.addWidget(self.vmNameLabel, 2, 0, 1, 1)
-
-        self.vmNameLineEdit = QLineEdit(self.layoutWidget)
-        self.vmNameLineEdit.setObjectName(u"vmNameLineEdit")
-
-        self.gridLayout.addWidget(self.vmNameLineEdit, 3, 0, 1, 1)
+        self.gridLayout.addWidget(self.vmNameLabel, 4, 0, 1, 1)
 
         self.buttonBox = QDialogButtonBox(self.layoutWidget)
         self.buttonBox.setObjectName(u"buttonBox")
         self.buttonBox.setStandardButtons(QDialogButtonBox.StandardButton.Apply|QDialogButtonBox.StandardButton.Ok)
 
-        self.gridLayout.addWidget(self.buttonBox, 4, 1, 1, 1)
+        self.gridLayout.addWidget(self.buttonBox, 6, 1, 1, 1)
+
+        self.hypervisorComboBox = QComboBox(self.layoutWidget)
+        self.hypervisorComboBox.setObjectName(u"hypervisorComboBox")
+
+        self.gridLayout.addWidget(self.hypervisorComboBox, 1, 0, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
@@ -122,9 +132,10 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.actionLabel.setText(QCoreApplication.translate("MainWindow", u"Action", None))
+        self.hypervisorLabel.setText(QCoreApplication.translate("MainWindow", u"Hypervisor", None))
         self.headlessRadioButton.setText(QCoreApplication.translate("MainWindow", u"Headless", None))
         self.hardRadioButton.setText(QCoreApplication.translate("MainWindow", u"Hard", None))
+        self.actionLabel.setText(QCoreApplication.translate("MainWindow", u"Action", None))
         self.vmNameLabel.setText(QCoreApplication.translate("MainWindow", u"virtual machine name", None))
         self.menuvmctl.setTitle(QCoreApplication.translate("MainWindow", u"vmctl", None))
     # retranslateUi
