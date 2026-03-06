@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 import argparse
+import psutil
 import sys
 
 from VirtualMachineManage import VirtualMachineManage
+
 
 class HypervisorNotValid(BaseException):
     """
@@ -23,12 +25,12 @@ def vmm_run(args):
 
     for proc in psutil.process_iter(['pid', 'name']):
         #if re.match(re.escape(hypervisor), proc.info['name']):
-        if current_hypervisor_name.strip() == proc.info['name'].strip():
+        if args.hypervisor.strip() == proc.info['name'].strip():
             print(f"{proc.info['name']}")
             matched = proc.info['name']
 
     if not matched:
-        message = f"Hypervisor {hypervisor} not running, start {hypervisor} first"
+        message = f"Hypervisor {args.hypervisor} not running, start {args.hypervisor} first"
         print(message)
         raise HypervisorNotValid(message)
 
