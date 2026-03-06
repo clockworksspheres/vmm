@@ -4,7 +4,68 @@ import sys
 
 from VirtualMachineManage import VirtualMachineManage
 
+class HypervisorNotValid(BaseException):
+    """
+    Custom Exception
+    """
+    def __init__(self, *args, **kwargs):
+        BaseException.__init__(self, *args, **kwargs)
+
+
 HYPERVISORS = {"vmware", "virtualbox", "utm"}
+
+
+def vmm_run(args):
+    hyper = args.hypervisor
+    vm = args.vm
+
+    matched = None
+
+    for proc in psutil.process_iter(['pid', 'name']):
+        #if re.match(re.escape(hypervisor), proc.info['name']):
+        if current_hypervisor_name.strip() == proc.info['name'].strip():
+            print(f"{proc.info['name']}")
+            matched = proc.info['name']
+
+    if not matched:
+        message = f"Hypervisor {hypervisor} not running, start {hypervisor} first"
+        print(message)
+        raise HypervisorNotValid(message)
+
+    vmm = VirtualMachineManage(hyper)
+
+    cmd = args.command
+
+    if args.command == "list":
+        vmm.list_vms(hyper)
+        return
+
+    if cmd == "start":
+        vmm.start_vm(vm, headless=args.headless)
+        print(f"Started {hyper} → {vm}")
+
+    elif cmd == "stop":
+        vmm.stop_vm(vm)
+        print(f"Stopped {hyper} → {vm}")
+
+    elif cmd == "pause":
+        vmm.pause_vm(vm)
+        print(f"Suspended {hyper} → {vm}")
+
+    elif cmd == "unpause":
+        vmm.unpause_vm(vm)
+        print(f"Suspended {hyper} → {vm}")
+
+    elif cmd == "reset":
+        vmm.reset_vm(vm, hard=args.hard)
+        print(f"Reset {hyper} → {vm}")
+
+    elif cmd == "status":
+        vmm.list_vms()
+
+    elif cmd == "ip":
+        vmm.get_ip(vm)
+
 
 def main():
     # HYPERVISORS = {"vmware", "virtualbox", "utm"}
@@ -149,6 +210,9 @@ Examples:
     vmm = VirtualMachineManage(hyper)
 
     cmd = args.command
+
+    vmm_run(args)
+    sys.exit()
 
     if args.command == "list":
         vmm.list_vms(hyper)
