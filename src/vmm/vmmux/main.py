@@ -37,19 +37,24 @@ class VmCtlUi(QMainWindow):
                                                  "HyperV",
                                                  "Virtualbox"])
 
-        self.ui.actionComboBox.addItems(["start", "stop", "restart",
+        self.ui.actionComboBox.addItems(["start", "stop", "reset",
                                          "pause", "unpause",
                                          "status", "ip", "list"])
  
+        # set the stacked widget to the index 0 for "start" action 
         self.ui.stackedWidget.setCurrentIndex(0)
+
+        # Set the default state of the "hard" radio button to "selected"
+        self.ui.hardRadioButton.setChecked(True)
 
         # Connect combo to stack
         self.ui.actionComboBox.currentIndexChanged.connect(self.handle_combo_action)
 
         # Connect run action button 
         self.ui.runPushButton.clicked.connect(self.spawn_vm)
+        
         # Connect quit action button 
-        # self.ui.quitPushButton.clicked.connect(self.reject)
+        self.ui.quitPushButton.clicked.connect(QApplication.quit)
 
     def handle_combo_action(self, index):
         """
