@@ -1,5 +1,7 @@
 
 import sys
+import psutil
+import re
 
 from PySide6.QtWidgets import (QApplication, QMainWindow)
 
@@ -28,14 +30,19 @@ class VmCtlUi(QMainWindow):
         # Platform-specific combo items
         platform = sys.platform.lower()
 
+        #####
+        # Do not change the names in either dictionary in
+        # any way, or this code will not work.  The strings
+        # below must match the process name acquired by 
+        # psutil.process_iter for the specific hypervisor.
         if platform.startswith("darwin"):
             self.ui.hypervisorComboBox.addItems(["VMware Fusion",
                                                  "UTM",
-                                                 "Virtualbox"])
+                                                 "VirtualBox"])
         elif platform.startswith("win"):
             self.ui.hypervisorComboBox.addItems(["VMware Workstation",
                                                  "HyperV",
-                                                 "Virtualbox"])
+                                                 "VirtualBox"])
 
         self.ui.actionComboBox.addItems(["start", "stop", "reset",
                                          "pause", "unpause",
@@ -73,6 +80,7 @@ class VmCtlUi(QMainWindow):
     def spawn_vm(self):
         # build command
         current_hypervisor_index = self.ui.hypervisorComboBox.currentIndex()
+        current_hypervisor_name = self.ui.hypervisorComboBox.currentText()
         current_action_index = self.ui.actionComboBox.currentIndex()
 
         if sys.platform.lower().startswith("darwin"):
@@ -83,20 +91,31 @@ class VmCtlUi(QMainWindow):
             winHypervisors = { 0: "vmware", 1: "hyperv", 2: "virtualbox"}
             hypervisor = winHypervisors[current_hypervisor_index]
 
-        action = self.ui.actionComboBox.currentText()
+        matched = None
 
-        vm = self.ui.vmNameLineEdit.text()
+        for proc in psutil.process_iter(['pid', 'name']):
+            #if re.match(re.escape(hypervisor), proc.info['name']):
+            if current_hypervisor_name.strip() == proc.info['name'].strip():
+                print(f"{proc.info['name']}")
+                matched = proc.info['name']
 
-        cmd = ["/usr/local/bin/vmctl", action.strip(), hypervisor.strip(), vm.strip()]
+                action = self.ui.actionComboBox.currentText()
 
-        print(f"{cmd}")
-        self.rw.setCommand(cmd)
-        out, err, retval = self.rw.communicate()
-        print(f"{out}")
-        print(f"{err}")
-        print(f"{retval}")
+                vm = self.ui.vmNameLineEdit.text()
 
-        # start_detached(cmd)
+                cmd = ["/usr/local/bin/vmctl", action.strip(), hypervisor.strip(), vm.strip()]
+
+                print(f"{cmd}")
+                """self.rw.setCommand(cmd)
+                out, err, retval = self.rw.communicate()
+                print(f"{out}")
+                print(f"{err}")
+                print(f"{retval}")
+                """
+                start_detached(cmd)
+
+        if not matched:
+            print(f"Hypervisor {hypervisor} not running, start {hypervisor} first")
 
 
 if __name__=="__main__":
