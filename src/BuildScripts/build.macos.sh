@@ -17,6 +17,7 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
    pip install --upgrade pip
    pip install PyInstaller
    pip install pyside6
+   pip install psutil
 else
    source packenv/bin/activate
 fi

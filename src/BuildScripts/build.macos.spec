@@ -35,4 +35,12 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    onefile=True,
+)
+
+app = BUNDLE(
+    exe,
+    name='vmctl.app',
+    icon=None,
+    bundle_identifier="org.clockworksspheres.vmm.vmctl",
 )
