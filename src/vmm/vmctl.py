@@ -2,19 +2,11 @@
 import argparse
 import sys
 
-from PySide6.QtWidgets import (QApplication)
+from PySide6.QtWidgets import QApplication
 
 from VirtualMachineManage import VirtualMachineManage
 from vmmux.main import VmCtlUi
 from vmm_run import vmm_run
-
-
-class HypervisorNotValid(BaseException):
-    """
-    Custom Exception
-    """
-    def __init__(self, *args, **kwargs):
-        BaseException.__init__(self, *args, **kwargs)
 
 
 HYPERVISORS = {"vmware", "virtualbox", "utm"}
@@ -175,45 +167,7 @@ Examples:
         vmm_run(args)
         sys.exit()
 
-    hyper = args.hypervisor
-    vm = args.vm
-
-    vmm = VirtualMachineManage(hyper)
-
-    cmd = args.command
-
-    if args.command == "list":
-        vmm.list_vms(hyper)
-        return
-
-    if cmd == "start":
-        vmm.start_vm(vm, headless=args.headless)
-        print(f"Started {hyper} → {vm}")
-
-    elif cmd == "stop":
-        vmm.stop_vm(vm)
-        print(f"Stopped {hyper} → {vm}")
-
-    elif cmd == "pause":
-        vmm.pause_vm(vm)
-        print(f"Suspended {hyper} → {vm}")
-
-    elif cmd == "unpause":
-        vmm.unpause_vm(vm)
-        print(f"Suspended {hyper} → {vm}")
-
-    elif cmd == "reset":
-        vmm.reset_vm(vm, hard=args.hard)
-        print(f"Reset {hyper} → {vm}")
-
-    elif cmd == "status":
-        vmm.list_vms()
-
-    elif cmd == "ip":
-        vmm.get_ip(vm)
-
 
 if __name__ == "__main__":
     main()
-
 

@@ -1,9 +1,17 @@
 import psutil
-import sys
+# import sys
 
 from VirtualMachineManage import VirtualMachineManage
 
 hypervisorMap = {"vmware": "VMware Fusion", "virtualbox": "VirtualBox", "utm": "UTM"}
+
+
+class HypervisorNotValid(BaseException):
+    """
+    Custom Exception
+    """
+    def __init__(self, *args, **kwargs):
+        BaseException.__init__(self, *args, **kwargs)
 
 
 def vmm_run(args):
