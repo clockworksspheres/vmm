@@ -24,9 +24,18 @@ def main():
 
     subparsers = parser.add_subparsers(dest="command")
 
+    # Common arguments for most commands
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument("hypervisor", choices=HYPERVISORS,
+                        help="vmware | virtualbox | utm")
+
+    common.add_argument("vm", nargs="?", 
+                        help="VM name or full path to .vmx / .vbox file")
+
     # ── list ────────────────────────────────────────────────────────────────
     subparsers.add_parser(
         "list",
+        parents=[common],
         help="List VMs from all hypervisors",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
@@ -37,12 +46,6 @@ Examples:
   %(prog)s                     # shows running VMware, all VirtualBox & UTM VMs
 """
     )   
-
-    # Common arguments for most commands
-    common = argparse.ArgumentParser(add_help=False)
-    common.add_argument("hypervisor", choices=HYPERVISORS,
-                        help="vmware | virtualbox | utm")
-    common.add_argument("vm", help="VM name or full path to .vmx / .vbox file")
 
     # ── start ───────────────────────────────────────────────────────────────
     p = subparsers.add_parser(

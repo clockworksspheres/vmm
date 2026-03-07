@@ -31,7 +31,7 @@ class VirtualMachineManage(VirtualMachineManageTemplate):
             elif sys.platform.lower().startswith("win32"):
                 from WindowsVmwareVmm import WindowsVmwareVmm
                 self.vmm = WindowsVmwareVmm(self.logger)
-        elif self.framework == "VirtualBox":
+        elif self.framework == "virtualbox":
             if sys.platform.lower().startswith("darwin"):
                 from MacosVirtualboxVmm import MacosVirtualboxVmm
                 self.vmm = MacosVirtualboxVmm(self.logger)
@@ -87,11 +87,12 @@ class VirtualMachineManage(VirtualMachineManageTemplate):
         """
         Get the status of a VM
         """
+        pass
 
     def get_ip(self, vm: str = "", **kwargs):
         """
         Get the IP of a VM 
         """
-        self.vmm.get_ip(vm, **kwargs)
-
-
+        ip =  self.vmm.get_ip(vm, **kwargs)
+        #print(f"{ip}")
+        return ip

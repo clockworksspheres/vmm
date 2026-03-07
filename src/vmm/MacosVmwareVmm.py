@@ -3,6 +3,10 @@ from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp
 from lib.run_commands import RunWith
 from VirtualMachineManageTemplate import VirtualMachineManageTemplate
+from lib.vmware_fusion_list_status import (find_all_vmx_files,
+                                           detect_vm_status,
+                                           list_running_vms,
+                                           get_vm_ip)
 
 
 class MacosVmwareVmm(VirtualMachineManageTemplate):
@@ -22,14 +26,28 @@ class MacosVmwareVmm(VirtualMachineManageTemplate):
 
         self.vmrun = "/Applications/VMware Fusion.app/Contents/Library/vmrun"
 
-    def list_vms(self):
+    def list_vms(self, **kwargs):
         """
         List available VMs 
+        """
+        # print("Got into macosVmwareVmm list method...")
+        vmx_files = find_all_vmx_files("/Users/victor/Virtual Machines.localized")
+        # print(f"{vmx_files}")
+
+        running_set = list_running_vms()
+
+        for vmx in vmx_files:
+            name = vmx.stem
+            status = detect_vm_status(str(vmx), running_set)
+            ip = get_vm_ip(str(vmx)) if status == "running" else None
+
+            print(f"{name:25} {status:12} {ip or 'N/A'}")
         """
         cmd = [self.vmrun, "list"]
         self.run.setCommand(cmd)
         output, _, _ = self.run.communicate()
         print(f"{output}")
+        """
 
     def start_vm(self, vm: str = "", headless: bool = False):
         """

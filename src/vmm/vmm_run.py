@@ -38,10 +38,10 @@ def vmm_run(args):
     cmd = args.command
 
     if args.command == "list":
-        vmm.list_vms(hyper)
-        return
+        # print("Got a list action")
+        vmm.list_vms()
 
-    if cmd == "start":
+    elif cmd == "start":
         vmm.start_vm(vm, headless=args.headless)
         print(f"Started {hyper} → {vm}")
 
