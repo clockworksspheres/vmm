@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 import argparse
-import psutil
 import sys
 
+from PySide6.QtWidgets import (QApplication)
+
 from VirtualMachineManage import VirtualMachineManage
+from vmmux.main import VmCtlUi
+from vmm_run import vmm_run
 
 
 class HypervisorNotValid(BaseException):
@@ -17,65 +20,17 @@ class HypervisorNotValid(BaseException):
 HYPERVISORS = {"vmware", "virtualbox", "utm"}
 
 
-def vmm_run(args):
-    hyper = args.hypervisor
-    vm = args.vm
-
-    matched = None
-
-    for proc in psutil.process_iter(['pid', 'name']):
-        #if re.match(re.escape(hypervisor), proc.info['name']):
-        if args.hypervisor.strip() == proc.info['name'].strip():
-            print(f"{proc.info['name']}")
-            matched = proc.info['name']
-
-    if not matched:
-        message = f"Hypervisor {args.hypervisor} not running, start {args.hypervisor} first"
-        print(message)
-        raise HypervisorNotValid(message)
-
-    vmm = VirtualMachineManage(hyper)
-
-    cmd = args.command
-
-    if args.command == "list":
-        vmm.list_vms(hyper)
-        return
-
-    if cmd == "start":
-        vmm.start_vm(vm, headless=args.headless)
-        print(f"Started {hyper} → {vm}")
-
-    elif cmd == "stop":
-        vmm.stop_vm(vm)
-        print(f"Stopped {hyper} → {vm}")
-
-    elif cmd == "pause":
-        vmm.pause_vm(vm)
-        print(f"Suspended {hyper} → {vm}")
-
-    elif cmd == "unpause":
-        vmm.unpause_vm(vm)
-        print(f"Suspended {hyper} → {vm}")
-
-    elif cmd == "reset":
-        vmm.reset_vm(vm, hard=args.hard)
-        print(f"Reset {hyper} → {vm}")
-
-    elif cmd == "status":
-        vmm.list_vms()
-
-    elif cmd == "ip":
-        vmm.get_ip(vm)
-
-
 def main():
     # HYPERVISORS = {"vmware", "virtualbox", "utm"}
 
     parser = argparse.ArgumentParser(
         description="Control virtual machines across VMware Fusion, VirtualBox, and UTM"
-    )   
-    subparsers = parser.add_subparsers(dest="command", required=True)
+    )
+    parser.add_argument("-g", "--gui", dest="gui", action="store_true", 
+                        default=False, 
+                        help="Run the vmctl graphical user interface")
+
+    subparsers = parser.add_subparsers(dest="command")
 
     # ── list ────────────────────────────────────────────────────────────────
     subparsers.add_parser(
@@ -206,15 +161,26 @@ Examples:
 
     args = parser.parse_args()
 
+    if args.gui:
+        app = QApplication(sys.argv)
+        print("started app...")
+        window = VmCtlUi()
+        print("initiated window")
+        window.show()
+        print("showing window...")
+        window.raise_()
+        print("raising_ window")
+        sys.exit(app.exec())
+    else:
+        vmm_run(args)
+        sys.exit()
+
     hyper = args.hypervisor
     vm = args.vm
 
     vmm = VirtualMachineManage(hyper)
 
     cmd = args.command
-
-    vmm_run(args)
-    sys.exit()
 
     if args.command == "list":
         vmm.list_vms(hyper)

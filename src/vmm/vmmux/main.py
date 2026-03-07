@@ -1,11 +1,17 @@
 
+"""
+
+Only accessed from ../vmctl.py - Only access this file from one directory up...
+
+"""
+
 import sys
 import psutil
 import re
 
 from PySide6.QtWidgets import (QApplication, QMainWindow)
 
-from mainwindow_ui import Ui_MainWindow
+from vmmux.mainwindow_ui import Ui_MainWindow
 
 sys.path.append("./..")
 
@@ -92,18 +98,21 @@ class VmCtlUi(QMainWindow):
             hypervisor = winHypervisors[current_hypervisor_index]
 
         matched = None
-
+        hypervisorName = current_hypervisor_name.strip()
         for proc in psutil.process_iter(['pid', 'name']):
             #if re.match(re.escape(hypervisor), proc.info['name']):
-            if current_hypervisor_name.strip() == proc.info['name'].strip():
+            if hypervisorName == proc.info['name'].strip():
                 print(f"{proc.info['name']}")
                 matched = proc.info['name']
 
-                action = self.ui.actionComboBox.currentText()
+                action = self.ui.actionComboBox.currentText().strip()
 
-                vm = self.ui.vmNameLineEdit.text()
+                vm = self.ui.vmNameLineEdit.text().strip()
 
-                cmd = ["/usr/local/bin/vmctl", action.strip(), hypervisor.strip(), vm.strip()]
+                args = {"hypervisor"}
+
+
+                cmd = ["/usr/local/bin/vmctl", action, hypervisorName, vm]
 
                 print(f"{cmd}")
                 """self.rw.setCommand(cmd)
