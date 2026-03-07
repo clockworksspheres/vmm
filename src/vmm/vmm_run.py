@@ -1,6 +1,8 @@
 import psutil
 import sys
 
+from VirtualMachineManage import VirtualMachineManage
+
 hypervisorMap = {"vmware": "VMware Fusion", "virtualbox": "VirtualBox", "utm": "UTM"}
 
 

@@ -8,10 +8,13 @@ Only accessed from ../vmctl.py - Only access this file from one directory up...
 import sys
 import psutil
 import re
+from argparse import Namespace
+
 
 from PySide6.QtWidgets import (QApplication, QMainWindow)
 
 from vmmux.mainwindow_ui import Ui_MainWindow
+from vmm_run import vmm_run
 
 sys.path.append("./..")
 
@@ -87,15 +90,14 @@ class VmCtlUi(QMainWindow):
         # build command
         current_hypervisor_index = self.ui.hypervisorComboBox.currentIndex()
         current_hypervisor_name = self.ui.hypervisorComboBox.currentText()
-        current_action_index = self.ui.actionComboBox.currentIndex()
 
         if sys.platform.lower().startswith("darwin"):
             macHypervisors = { 0: "vmware", 1: "utm", 2: "virtualbox"}
-            hypervisor = macHypervisors[current_hypervisor_index]
+            hypervisor2run = macHypervisors[current_hypervisor_index]
 
         elif sys.platform.lower().startswith("win32"):
             winHypervisors = { 0: "vmware", 1: "hyperv", 2: "virtualbox"}
-            hypervisor = winHypervisors[current_hypervisor_index]
+            hypervisor2run = winHypervisors[current_hypervisor_index]
 
         matched = None
         hypervisorName = current_hypervisor_name.strip()
@@ -107,24 +109,32 @@ class VmCtlUi(QMainWindow):
 
                 action = self.ui.actionComboBox.currentText().strip()
 
-                vm = self.ui.vmNameLineEdit.text().strip()
+                vmach = self.ui.vmNameLineEdit.text().strip()
 
-                args = {"hypervisor"}
+                args = Namespace(
+                    command = action,
+                    vm = vmach,
+                    hypervisor = hypervisor2run,
+                    headless = False,
+                    hard = True,
+                )
 
-
-                cmd = ["/usr/local/bin/vmctl", action, hypervisorName, vm]
+                vmm_run(args)
+                """
+                cmd = ["/usr/local/bin/vmctl", action, hypervisorName, vmach]
 
                 print(f"{cmd}")
-                """self.rw.setCommand(cmd)
-                out, err, retval = self.rw.communicate()
-                print(f"{out}")
-                print(f"{err}")
-                print(f"{retval}")
-                """
+                #self.rw.setCommand(cmd)
+                #out, err, retval = self.rw.communicate()
+                
+                #print(f"{out}")
+                #print(f"{err}")
+                #print(f"{retval}")
                 start_detached(cmd)
+                """
 
         if not matched:
-            print(f"Hypervisor {hypervisor} not running, start {hypervisor} first")
+            print(f"Hypervisor {hypervisor2run} not running, start {hypervisor2run} first")
 
 
 if __name__=="__main__":
