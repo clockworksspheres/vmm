@@ -3,7 +3,10 @@ from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp
 from lib.run_commands import RunWith
 from VirtualMachineManageTemplate import VirtualMachineManageTemplate
-
+from lib.mac_virtualbox_list_status import (list_vms,
+                                            list_running_vms,
+                                            get_vm_state,
+                                            get_vm_ip)
 
 class MacosVirtualboxVmm(VirtualMachineManageTemplate):
 
@@ -26,10 +29,24 @@ class MacosVirtualboxVmm(VirtualMachineManageTemplate):
         """
         List available VMs 
         """
-        cmd = [self.vboxmanage, "list", "vms"]
-        self.run.setCommand(cmd)
-        out, _, _, = self.run.communicate()
-        print(f"{out}")
+
+        vms = list_vms()
+        running = list_running_vms()
+
+        print(f"{'VM Name':25} {'State':15} {'IP Address'}")
+        print("-" * 60) 
+
+        for name, uuid in vms.items():
+            state = get_vm_state(uuid)
+
+            if state == "running":
+                ip = get_vm_ip(uuid)
+            else:
+                ip = None
+
+            print(f"{name:25} {state:15} {ip or 'N/A'}")
+        return name, state, ip     
+
 
     def start_vm(self, vm: str = "", headless: bool = False):
         """
@@ -79,11 +96,8 @@ class MacosVirtualboxVmm(VirtualMachineManageTemplate):
         """
         Get the status of a virtual machine 
         """
-        cmd = [self.vboxmanage, "showvminfo", vm]
-        self.run.setCommand(cmd)
-        out, err, retval = self.run.communicate()
-        print(f"{out.strip()}")
-        return out.strip()
+        name, state, ip = self.list_vms()
+        return name, state, ip
 
     def get_ip(self, vm: str = ""):
         """
