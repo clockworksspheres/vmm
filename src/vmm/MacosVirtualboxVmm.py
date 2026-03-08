@@ -61,7 +61,8 @@ class MacosVirtualboxVmm(VirtualMachineManageTemplate):
         """
          Stop a virtual machine
         """
-        cmd = [self.vboxmanage, "controlvm", vm, "acpipowerbutton"]
+        # cmd = [self.vboxmanage, "controlvm", vm, "acpipowerbutton"]
+        cmd = [self.vboxmanage, "controlvm", vm, "poweroff"]
         self.run.setCommand(cmd)
         self.run.communicate()
 
