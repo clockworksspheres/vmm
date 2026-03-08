@@ -132,7 +132,7 @@ class VmCtlUi(QMainWindow):
         for proc in psutil.process_iter(['pid', 'name']):
             #if re.match(re.escape(hypervisor), proc.info['name']):
             if hypervisorName == proc.info['name'].strip():
-                print(f"{proc.info['name']}")
+                #print(f"{proc.info['name']}")
                 matched = proc.info['name']
 
                 action = self.ui.actionComboBox.currentText().strip()
@@ -146,7 +146,7 @@ class VmCtlUi(QMainWindow):
                     headless = False,
                     hard = True,
                 )
-                self.ui.textBrowser.clear()
+                self.ui.textBrowser.append("=========================")
                 vmm_run(args)
                 """
                 cmd = ["/usr/local/bin/vmctl", action, hypervisorName, vmach]
@@ -175,6 +175,4 @@ if __name__=="__main__":
     window.raise_()
     print("raising_ window")
     sys.exit(app.exec())
-
-
 
