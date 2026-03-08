@@ -21,6 +21,8 @@ sys.path.append("./..")
 from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp
 from lib.run_commands import start_detached, RunWith
+from vmmux.SimpleConsole import SimpleConsole, ConsoleStream
+
 
 class VmCtlUi(QMainWindow):
     """ 
@@ -72,6 +74,32 @@ class VmCtlUi(QMainWindow):
         # Connect quit action button 
         self.ui.quitPushButton.clicked.connect(QApplication.quit)
 
+        # Remove the old QTextBrowser
+        old = self.ui.textBrowser
+        layout = old.parent().layout()
+        layout.removeWidget(old)
+        old.deleteLater()
+
+        # Create and insert your custom console
+        self.ui.textBrowser = SimpleConsole()
+        self.ui.verticalLayout.addWidget(self.ui.textBrowser)
+
+        # Create stdout/stderr streams
+        self.stdout_stream = ConsoleStream(logfile="/tmp/logfile")
+        self.stderr_stream = ConsoleStream(logfile="/tmp/logfile")
+
+        self.stdout_stream.text_emitted.connect(self.ui.textBrowser.append_html)
+        self.stderr_stream.text_emitted.connect(self.ui.textBrowser.append_html)
+
+        # Redirect Python stdout/stderr
+        sys.stdout = self.stdout_stream
+        sys.stderr = self.stderr_stream
+
+        # Initial messages
+        #message = "Second post!!"
+        #print("Application started.")
+        #print(f"Argparse message: {message}")
+
     def handle_combo_action(self, index):
         """
         """
@@ -118,7 +146,7 @@ class VmCtlUi(QMainWindow):
                     headless = False,
                     hard = True,
                 )
-
+                self.ui.textBrowser.clear()
                 vmm_run(args)
                 """
                 cmd = ["/usr/local/bin/vmctl", action, hypervisorName, vmach]

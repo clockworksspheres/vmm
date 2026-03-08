@@ -319,19 +319,19 @@ class CyLogger(Singleton):
         # Add applicable handlers to the logger
         if not self.rotate and self.fileHandler:
             self.logr.addHandler(fileHandler)
-            self.logr.log(LogPriority.DEBUG,"Added FileHandler")
+            #self.logr.log(LogPriority.DEBUG,"Added FileHandler")
         elif self.rotate:
             self.logr.addHandler(rotHandler)
-            self.logr.log(LogPriority.DEBUG,"Added RotatingFileHandler")
+            #self.logr.log(LogPriority.DEBUG,"Added RotatingFileHandler")
             #self.doRollover(rotHandler)
 
         if myconsole:
             self.logr.addHandler(conHandler)
-            self.logr.log(LogPriority.DEBUG,"Added StreamHandler")
+            #self.logr.log(LogPriority.DEBUG,"Added StreamHandler")
         if self.syslog:
             try:
                 self.logr.addHandler(sysHandler)
-                self.logr.log(LogPriority.DEBUG,"Added SyslogHanlder")
+                #self.logr.log(LogPriority.DEBUG,"Added SyslogHanlder")
             except socket.error:
                 self.log(40, "Syslog not accepting connections!")
 

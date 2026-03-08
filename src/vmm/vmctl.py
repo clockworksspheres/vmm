@@ -158,13 +158,13 @@ Examples:
 
     if args.gui:
         app = QApplication(sys.argv)
-        print("started app...")
+        # print("started app...")
         window = VmCtlUi()
-        print("initiated window")
+        # print("initiated window")
         window.show()
-        print("showing window...")
+        # print("showing window...")
         window.raise_()
-        print("raising_ window")
+        # print("raising_ window")
         sys.exit(app.exec())
     else:
         vmm_run(args)
