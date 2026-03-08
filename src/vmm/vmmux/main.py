@@ -57,7 +57,7 @@ class VmCtlUi(QMainWindow):
 
         self.ui.actionComboBox.addItems(["start", "stop", "reset",
                                          "pause", "unpause",
-                                         "status", "ip", "list"])
+                                         "status"])
  
         # set the stacked widget to the index 0 for "start" action 
         self.ui.stackedWidget.setCurrentIndex(0)
